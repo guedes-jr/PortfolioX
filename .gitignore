@@ -1,0 +1,41 @@
+# Ambiente virtual
+venv/
+*.pyc
+__pycache__/
+*.pyo
+*.pyd
+
+# Configurações do banco de dados local
+*.sqlite3
+db.sqlite3
+.env
+
+# Arquivos de log e cache
+*.log
+*.pot
+local_settings.py
+__pycache__/
+*.swp
+*~
+
+# Arquivos de migração do Django desnecessários
+**/migrations/*.py
+!**/migrations/__init__.py
+
+# Arquivos do VSCode e PyCharm
+.vscode/
+.idea/
+*.iml
+
+# Dependências
+node_modules/
+package-lock.json
+yarn.lock
+
+# Arquivos do Docker (se usar)
+*.dockerfile
+docker-compose.yml
+
+# Arquivos do sistema operacional
+.DS_Store
+Thumbs.db
