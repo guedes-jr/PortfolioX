@@ -3,5 +3,6 @@ from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('investments.urls')),  # API URLs
+    path('', include('assets.urls')),  # API URLs
+    path('api/', include('api.urls')),  # Incluindo as rotas da API
 ]

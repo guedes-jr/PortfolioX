@@ -61,12 +61,62 @@ Sistema de Gerenciamento investimentos de forma eficiente, permitindo acompanham
 
 ## 🚀 Instalação
 
-### Clonando o Repositório
+### 📌 **Passo 1: Clonando o Repositório
 
 ```bash
 git clone https://github.com/guedes-jr/PortfolioX.git
 ```
 ... 
+
+### 📌 **Passo 2: Criar o Ambiente Virtual e Instalar Django 5**  
+Se ainda não tem o Python instalado, use a versão mais recente (recomendo **Python 3.10+**). Agora, execute:  
+
+```bash
+# Criar e ativar ambiente virtual
+python3 -m venv venv  
+source venv/bin/activate  # No Windows: venv\Scripts\activate
+
+# Instalar Django 5 e outras dependências iniciais
+pip install -r requeriments.txt
+```
+
+### 📌 **Passo 3: Criar Usuário e o Banco de Dados PostgreSQL**  
+```bash
+psql -U postgres -h localhost -c "create user portfoliox_user with password 'portfoliox'";
+psql -U postgres -h localhost -c "create database portfoliox_db owner portfoliox_user;";
+psql -U postgres -d portfoliox_db -h localhost -c "create extension unaccent";
+psql -U postgres -d portfoliox_db -h localhost -c "create extension pg_trgm";
+```
+
+### 📌 **Passo 4: Criar e Aplicar as Migrações**  
+```bash
+python backend/manage.py migrate
+```
+
+### 📌 **Passo 5: Criar um Superusuário para o Django Admin**  
+```bash
+python backend/manage.py createsuperuser
+```
+**User:** user | **Pass:** user@123
+
+### 📌 **Passo 6: Rodar o Servidor para Teste**  
+```bash
+python backend/manage.py runserver
+```
+Acesse **http://127.0.0.1:8000/admin/** e faça login com o superusuário.
+
+### 📌 **Passo 7: Instalar os módulos do nodejs**  
+```bash
+cd frontend/
+
+npm install
+```
+
+### 📌 **Passo 8: Iniciar os serviços do FrontEnd**  
+```bash
+npm run dev
+```
+Acesse **http://127.0.0.1:300/** e faça login com o superusuário.  
 
 ## 📦 Scripts Disponíveis
 
