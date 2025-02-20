@@ -4,7 +4,7 @@ from .models import Asset, Transaction, Dividend
 class AssetSerializer(serializers.ModelSerializer):
     class Meta:
         model = Asset
-        fields = "__all__"
+        fields = '__all__'  # Inclui todos os campos do modelo
 
 class TransactionSerializer(serializers.ModelSerializer):
     class Meta:

@@ -2,18 +2,27 @@ from django.db import models
 from django.contrib.auth.models import User
 
 # Modelo de Ativos (ações, FIIs, ETFs, etc.)
+from django.db import models
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
+
 class Asset(models.Model):
     ASSET_TYPES = [
-        ("STOCK", "Ação"),
-        ("FII", "Fundo Imobiliário"),
-        ("ETF", "ETF"),
-        ("RF", "Renda Fixa"),
+        ('STOCK', 'Ação'),
+        ('FII', 'Fundo Imobiliário'),
+        ('ETF', 'ETF'),
+        ('BOND', 'Renda Fixa'),
+        ('CRYPTO', 'Criptomoeda'),
     ]
 
-    name = models.CharField(max_length=100)
-    ticker = models.CharField(max_length=10, unique=True)
-    asset_type = models.CharField(max_length=10, choices=ASSET_TYPES)
-    created_at = models.DateTimeField(auto_now_add=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)  # Relacionado ao usuário dono do ativo
+    name = models.CharField(max_length=100)  # Nome do ativo
+    ticker = models.CharField(max_length=10, unique=True)  # Código na bolsa (ex: PETR4)
+    type = models.CharField(max_length=10, choices=ASSET_TYPES, default="STOCK")  # Tipo de ativo
+    price = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)  # Último preço
+    quantity = models.PositiveIntegerField(default=0)  # Quantidade comprada
+    created_at = models.DateTimeField(auto_now_add=True)  # Data de cadastro
 
     def __str__(self):
         return f"{self.ticker} - {self.name}"
