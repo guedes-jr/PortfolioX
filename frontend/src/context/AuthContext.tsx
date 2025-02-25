@@ -1,56 +1,85 @@
-"use client"; // Adicionado para tornar este um Client Component
-
-import { createContext, useContext, useState, useEffect, ReactNode } from "react";
-import { useRouter } from "next/navigation"; // Para redirecionamento no Next.js 14
+"use client"; // Para usar hooks no Next.js 14
+import { createContext, useState, useContext, ReactNode, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
 
-// Definição do tipo do contexto de autenticação
 interface AuthContextType {
   token: string | null;
-  setToken: (token: string | null) => void;
+  user: any | null;
+  isAuthenticated: boolean;
+  setToken: (token: string) => void;
+  setUser: (user: any) => void;
   logout: () => void;
 }
 
-// Criando o contexto de autenticação
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const [token, setTokenState] = useState<string | null>(null);
+  const [token, setTokenState] = useState<string | null>(Cookies.get("token") || null);
+  const [user, setUserState] = useState<any | null>(null);
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
   const router = useRouter();
 
-  // Atualiza o token no estado e nos Cookies
-  const setToken = (newToken: string | null) => {
-    setTokenState(newToken);
-    if (newToken) {
-      Cookies.set("token", newToken, { expires: 7 });
-    } else {
-      Cookies.remove("token");
-    }
-  };
-
-  // Logout limpa o token e redireciona para login
-  const logout = () => {
-    setToken(null);
-    router.push("/login");
-  };
-
-  // Recupera o token dos Cookies ao carregar a página
   useEffect(() => {
     const storedToken = Cookies.get("token");
+    const storedUser = Cookies.get("user");
+
     if (storedToken) {
-      setToken(storedToken);
+      setTokenState(storedToken);
+      setIsAuthenticated(true);
+
+      if (storedUser && storedUser !== "undefined") {
+        try {
+          const parsedUser = JSON.parse(storedUser);
+          setUserState(parsedUser);
+        } catch (error) {
+          console.error("Erro ao analisar dados do usuário:", error);
+          setUserState(null);
+        }
+      } else {
+        setUserState(null);
+      }
+    } else {
+      setIsAuthenticated(false);
+      setUserState(null);
     }
+    setLoading(false); // Defina o carregamento como falso após a verificação dos cookies
   }, []);
 
+  const setToken = (token: string) => {
+    setTokenState(token);
+    Cookies.set("token", token, { expires: 7 });
+    setIsAuthenticated(true);
+  };
+
+  const setUser = (user: any) => {
+    if (user) {
+      setUserState(user);
+      Cookies.set("user", JSON.stringify(user), { expires: 7 });
+    } else {
+      console.error("Erro: user é undefined");
+    }
+  };
+
+  const logout = () => {
+    setTokenState(null);
+    setUserState(null);
+    setIsAuthenticated(false);
+    Cookies.remove("token");
+    Cookies.remove("user");
+    router.push("/login"); // Redireciona para a página de login após logout
+  };
+
   return (
-    <AuthContext.Provider value={{ token, setToken, logout }}>
-      {children}
+    <AuthContext.Provider value={{ token, user, isAuthenticated, setToken, setUser, logout }}>
+      {!loading && children} {/* Renderize os filhos apenas quando o carregamento estiver completo */}
     </AuthContext.Provider>
   );
 };
 
-// Hook para acessar o contexto
-export const useAuth = () => {
+// Hook customizado para usar o contexto
+export const useAuth = (): AuthContextType => {
   const context = useContext(AuthContext);
   if (!context) {
     throw new Error("useAuth must be used within an AuthProvider");

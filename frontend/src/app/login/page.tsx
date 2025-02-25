@@ -1,14 +1,20 @@
 "use client"; // Para usar hooks no Next.js 14
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useAuth } from "../../context/AuthContext";
 import { useRouter } from "next/navigation";
 
 const LoginPage = () => {
-  const { setToken } = useAuth();
+  const { setToken, setUser, isAuthenticated } = useAuth(); // Usar setToken e setUser do contexto
   const router = useRouter();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      router.push("/dashboard");
+    }
+  }, [isAuthenticated, router]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -25,7 +31,8 @@ const LoginPage = () => {
       }
 
       const data = await response.json();
-      setToken(data.access); // Armazena o token no contexto e nos cookies
+      setToken(data.access);
+      setUser(data.user);
       router.push("/dashboard"); // Redireciona após login
     } catch (err: any) {
       setError(err.message);

@@ -1,21 +1,14 @@
-import type { Metadata } from "next";
-import { AuthProvider } from "../context/AuthContext"; // Importando o AuthProvider
-import "@/styles/globals.css"; // Seu CSS global
+"use client"; // ⬅️ Importante se o layout usa hooks ou cookies
 
-export const metadata: Metadata = {
-  title: "PortfolioX",
-  description: "Gerenciador de Investimentos",
-};
+import { AuthProvider } from "@/context/AuthContext";
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="pt">
       <body>
-        <AuthProvider>{children}</AuthProvider>
+        <AuthProvider>
+          {children}
+        </AuthProvider>
       </body>
     </html>
   );

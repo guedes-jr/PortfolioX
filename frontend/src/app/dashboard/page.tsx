@@ -1,23 +1,13 @@
-"use client";
+"use client"; // Para usar hooks no Next.js 14
 import { useAuth } from "../../context/AuthContext";
-import { useRouter } from "next/navigation";
-import { useEffect } from "react";
 
 const Dashboard = () => {
-  const { token, logout } = useAuth();
-  const router = useRouter();
-
-  useEffect(() => {
-    if (!token) {
-      router.push("/login");
-    }
-  }, [token, router]);
+  const { logout } = useAuth();
 
   return (
     <div>
       <h1>Dashboard</h1>
-      <p>Bem-vindo ao sistema!</p>
-      <button onClick={logout}>Sair</button>
+      <button onClick={logout}>Logout</button>
     </div>
   );
 };
