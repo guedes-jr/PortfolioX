@@ -31,8 +31,23 @@ const LoginPage = () => {
       }
 
       const data = await response.json();
+      console.log(data);
       setToken(data.access);
-      setUser(data.user);
+      // Adicione a lógica para buscar os dados do usuário após obter o token
+      const userResponse = await fetch("http://127.0.0.1:8000/api/user/", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${data.access}`
+        }
+      });
+
+      if (!userResponse.ok) {
+        throw new Error("Erro ao buscar dados do usuário");
+      }
+
+      const userData = await userResponse.json();
+      setUser(userData);
       router.push("/dashboard"); // Redireciona após login
     } catch (err: any) {
       setError(err.message);

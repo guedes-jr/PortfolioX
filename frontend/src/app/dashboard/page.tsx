@@ -1,4 +1,5 @@
-"use client"; // Para usar hooks no Next.js 14
+"use client"
+
 import { useAuth } from "../../context/AuthContext";
 
 const Dashboard = () => {
