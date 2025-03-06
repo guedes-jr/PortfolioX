@@ -1,7 +1,7 @@
 import React from "react";
 import { useQuery } from "react-query";
-import api from "../services/api";
-import { Asset } from "../types";
+import api from "@/src/services/api";
+import { Asset } from "@/src/types";
 
 // Função para buscar os ativos via API
 const fetchAssets = async (): Promise<Asset[]> => {

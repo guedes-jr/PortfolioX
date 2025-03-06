@@ -1,31 +1,28 @@
-"use client";
+import type React from "react";
+import type { Metadata } from "next";
+import { Inter } from "next/font/google";
+import "@/src/styles/globals.css"; // Certifique-se de que o caminho está correto
+import { ThemeProvider } from "@/src/components/theme-provider";
 
-import { AuthProvider, useAuth } from "@/context/AuthContext";
-import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+const inter = Inter({ subsets: ["latin"] });
 
-const AuthenticatedLayout = ({ children }: { children: React.ReactNode }) => {
-  const { isAuthenticated } = useAuth();
-  const router = useRouter();
-
-  useEffect(() => {
-    if (!isAuthenticated) {
-      router.push("/login");
-    }
-  }, [isAuthenticated, router]);
-
-  return <>{children}</>;
+export const metadata: Metadata = {
+  title: "Dashboard de Investimentos",
+  description: "Dashboard para gerenciamento de investimentos",
+  generator: 'v0.dev'
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode
+}) {
   return (
     <html lang="pt">
-      <body>
-        <AuthProvider>
-          <AuthenticatedLayout>
-            {children}
-          </AuthenticatedLayout>
-        </AuthProvider>
+      <body className={inter.className}>
+        <ThemeProvider>
+          {children}
+        </ThemeProvider>
       </body>
     </html>
   );
