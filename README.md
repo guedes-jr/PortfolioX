@@ -54,7 +54,7 @@ Sistema de Gerenciamento investimentos de forma eficiente, permitindo acompanham
 - Relatórios e Estatísticas
 - Autenticação e segurança
 
-## :🧭: Diagrama de Fluxo de Processo
+## 🧭 Diagrama de Fluxo de Processo
 
 ```mermaid
 flowchart TD
